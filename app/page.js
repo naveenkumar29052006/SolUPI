@@ -14,19 +14,15 @@ export default function Home() {
         <section>
           <HeroSection />
         </section>
-        <div className="h-32 md:h-48"></div>
         <section>
           <Features />
         </section>
-        <div className="h-32 md:h-48"></div>
         <section>
           <HowItWorks />
         </section>
-        <div className="h-32 md:h-48"></div>
         <section>
           <FAQ />
         </section>
-        <div className="h-32 md:h-48"></div>
       </main>
       <Footer />
     </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -47,93 +47,122 @@ export default function FAQ() {
   };
 
   return (
-  <section id="faq" className="py-32 md:py-40 bg-black relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent pointer-events-none" />
+  <section id="faq" className="py-20 md:py-28 bg-black relative overflow-hidden">
+      {/* Subtle background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-white/[0.02] pointer-events-none" />
       
       <div className="container relative z-10">
         {/* Section Header */}
         <motion.div 
-          className="text-center mb-20 md:mb-32"
+          className="text-center mb-12 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            Frequently Asked <span className="gradient-text">Questions</span>
+          <motion.div 
+            className="inline-block mb-5"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+              <span className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                FAQ
+              </span>
+            </div>
+          </motion.div>
+
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight text-white">
+            Frequently Asked Questions
           </h2>
-          <p className="text-xl sm:text-2xl md:text-3xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto font-light">
             Everything you need to know about buying Solana with UPI
           </p>
         </motion.div>
 
         {/* FAQ List */}
-  <div className="max-w-5xl mx-auto space-y-12">
+        <div className="max-w-3xl mx-auto space-y-2">
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="rounded-3xl bg-gradient-to-br from-purple-900/10 to-transparent border border-purple-500/20 hover:border-purple-500/60 overflow-hidden transition-all duration-300 group"
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+              className="group relative"
             >
-              <motion.button
-                onClick={() => toggleFAQ(index)}
-                className="w-full px-10 py-8 flex items-center justify-between text-left focus:outline-none hover:bg-purple-900/10 transition-colors duration-300"
-                whileHover={{ x: 2 }}
-                transition={{ duration: 0.2 }}
-              >
-                <span className="text-xl sm:text-2xl font-semibold text-white pr-8 leading-relaxed group-hover:text-purple-300 transition-colors">
-                  {faq.question}
-                </span>
-                <motion.div
-                  animate={{ rotate: openIndex === index ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex-shrink-0"
+              <div className={`
+                rounded-2xl border transition-all duration-300
+                ${openIndex === index 
+                  ? 'bg-white/[0.08] border-white/20 shadow-lg shadow-white/5' 
+                  : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.05] hover:border-white/15'
+                }
+              `}>
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="relative w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
                 >
-                  {openIndex === index ? (
-                    <Minus className="w-8 h-8 text-purple-400" strokeWidth={2.5} />
-                  ) : (
-                    <Plus className="w-8 h-8 text-purple-400" strokeWidth={2.5} />
+                  <span className={`
+                    text-sm md:text-base font-semibold pr-4 transition-colors duration-300
+                    ${openIndex === index ? 'text-white' : 'text-gray-300 group-hover:text-white'}
+                  `}>
+                    {faq.question}
+                  </span>
+                  <div className="flex-shrink-0">
+                    <motion.div
+                      animate={{ rotate: openIndex === index ? 180 : 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                      className={`
+                        w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300
+                        ${openIndex === index 
+                          ? 'bg-white/20' 
+                          : 'bg-white/10 group-hover:bg-white/15'
+                        }
+                      `}
+                    >
+                      <ChevronDown className="w-4 h-4 text-white" strokeWidth={2} />
+                    </motion.div>
+                  </div>
+                </button>
+                <AnimatePresence>
+                  {openIndex === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-5 text-gray-400 leading-relaxed text-sm md:text-base border-t border-white/10 pt-4 mt-1">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
                   )}
-                </motion.div>
-              </motion.button>
-              <AnimatePresence>
-                {openIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-10 pb-8 text-gray-400 leading-relaxed text-lg sm:text-xl">
-                      {faq.answer}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                </AnimatePresence>
+              </div>
             </motion.div>
           ))}
         </div>
 
         {/* Contact CTA */}
         <motion.div 
-          className="mt-40 text-center"
-          initial={{ opacity: 0, y: 30 }}
+          className="mt-12 md:mt-16 text-center"
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <p className="text-gray-400 mb-10 text-xl sm:text-2xl">Still have questions?</p>
+          <p className="text-gray-400 mb-5 text-base md:text-lg">
+            Still have questions? <span className="text-white font-semibold">We're here to help</span>
+          </p>
           <motion.button 
-            className="px-14 py-6 md:px-20 md:py-8 bg-white/10 backdrop-blur-sm border-2 border-purple-500 text-white font-semibold rounded-3xl shadow-lg hover:bg-white/20 hover:border-purple-500 transition-all duration-300 text-2xl sm:text-3xl"
-            whileHover={{ scale: 1.03, y: -2 }}
+            whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
+            className="px-8 py-4 bg-white/10 backdrop-blur-xl border border-white/20 text-white font-semibold rounded-xl hover:bg-white/15 hover:border-white/30 transition-all duration-300 text-sm md:text-base"
           >
-            Contact Support →
+            Contact Support
           </motion.button>
         </motion.div>
       </div>

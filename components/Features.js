@@ -66,30 +66,38 @@ export default function Features() {
   };
 
   return (
-  <section id="features" className="py-32 md:py-40 bg-black relative overflow-hidden">
+  <section id="features" className="py-20 md:py-28 bg-black relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 via-transparent to-transparent pointer-events-none" />
       
       <div className="container relative">
         {/* Section Header */}
         <motion.div 
-          className="text-center mb-20 md:mb-32"
+          className="text-center mb-12 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            Why Choose <span className="gradient-text">SolUPI</span>?
+          <motion.div 
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 mb-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-xs font-semibold text-purple-300 uppercase tracking-wide">✨ Features</span>
+          </motion.div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
+            Why Choose <span className="gradient-text">SolUPI</span>
           </h2>
-          <p className="text-xl sm:text-2xl md:text-3xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
-            Experience the most seamless way to buy Solana in India
+          <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto font-light">
+            Experience the most seamless way to buy Solana with <span className="text-white font-semibold">unmatched speed</span> and <span className="text-white font-semibold">security</span>
           </p>
         </motion.div>
 
         {/* Features Grid */}
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 xl:gap-20 items-stretch"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -101,30 +109,25 @@ export default function Features() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                whileHover={{ y: -5, scale: 1.01 }}
-                transition={{ duration: 0.2 }}
                 className="group relative"
+                whileHover={{ y: -10 }}
+                transition={{ duration: 0.3 }}
               >
-                <div className="p-10 rounded-3xl bg-gradient-to-br from-purple-900/10 to-transparent border border-purple-500/20 hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 h-full relative overflow-hidden flex flex-col">
-                  {/* Hover gradient overlay */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-purple-900/0 to-purple-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none"
-                  />
-                  
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-green-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative p-5 md:p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/20 group-hover:border-purple-500/50 transition-all duration-500 h-full flex flex-col overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-lg"></div>
                   <div className="relative z-10">
-                    {/* Icon with gradient background */}
-                    <motion.div 
-                      className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${feature.color} p-4 mb-8 group-hover:scale-105 transition-transform duration-500`}
-                      whileHover={{ rotate: [0, -5, 5, -5, 0] }}
-                      transition={{ duration: 0.4 }}
+                    {/* Icon */}
+                    <div 
+                      className={`w-11 h-11 rounded-lg bg-gradient-to-br ${feature.color} p-2.5 mb-4 flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
                     >
-                      <Icon className="w-full h-full text-white" strokeWidth={2} />
-                    </motion.div>
+                      <Icon className="w-full h-full text-white" strokeWidth={2.5} />
+                    </div>
 
-                    <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-white group-hover:text-purple-300 transition-colors duration-300">
+                    <h3 className="text-lg font-bold mb-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-green-300 transition-all duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed text-lg group-hover:text-gray-300 transition-colors duration-300">
+                    <p className="text-gray-300 leading-relaxed text-sm group-hover:text-gray-200 transition-colors duration-300">
                       {feature.description}
                     </p>
                   </div>

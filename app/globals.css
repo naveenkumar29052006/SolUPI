@@ -1,11 +1,12 @@
-@import "tailwindcss";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-@theme {
-  /* Custom color tokens for Tailwind v4 */
-  --color-background: #000000;
-  --color-foreground: #ffffff;
-  --color-solana-purple: #9945FF;
-  --color-solana-green: #14F195;
+@layer base {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+  }
 }
 
 :root {
@@ -127,3 +128,104 @@ html {
   color: #ffffff;
 }
 
+/* Star Button Animation */
+@keyframes star-btn {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/* Twinkling Stars Animation */
+@keyframes twinkle-stars {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.animate-twinkle-stars {
+  animation: twinkle-stars 2s ease-in-out infinite;
+}
+
+/* Rainbow Border Animation */
+@keyframes rainbow-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-rainbow-border {
+  animation: rainbow-border 3s ease-in-out infinite;
+}
+
+/* Rainbow Text Animation */
+@keyframes rainbow-text {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-rainbow-text {
+  animation: rainbow-text 2s ease-in-out infinite;
+}
+
+/* Color Change Animation */
+@keyframes color-change {
+  0%, 100% {
+    color: #14F195;
+  }
+  50% {
+    color: #9945FF;
+  }
+}
+
+.animate-color-change {
+  animation: color-change 2s ease-in-out infinite;
+}
+
+/* Meteor Border Animation */
+@keyframes meteor-border {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-meteor-border {
+  animation: meteor-border 2s linear infinite;
+}
+
+/* Tunnel Zoom Animation */
+@keyframes tunnel-zoom {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.animate-tunnel-zoom {
+  animation: tunnel-zoom 3s linear infinite;
+}

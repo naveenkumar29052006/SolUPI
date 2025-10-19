@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function HeroSection() {
   return (
-  <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black py-32 md:py-40">
+  <section id="home" className=" flex items-center justify-center overflow-hidden bg-black ">
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black to-black pointer-events-none">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
@@ -50,112 +50,148 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <div className="container relative z-10 text-center py-32 md:py-40">
+      <div className="container relative z-10 px-4 mx-auto">
         <motion.div 
-          className="space-y-20 md:space-y-32 lg:space-y-36"
+          className="flex flex-col items-center justify-center text-center space-y-6 md:space-y-8 max-w-5xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           {/* Badge */}
           <motion.div 
-            className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-gradient-to-r from-purple-900/30 to-green-900/30 border border-purple-500/50 backdrop-blur-sm hover:border-purple-500/80 transition-all cursor-pointer relative z-10 mb-12 md:mb-16"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
+            className="group inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 via-purple-500/5 to-green-500/10 border border-purple-500/30 backdrop-blur-md relative z-10 hover:border-purple-400/50 transition-all duration-300 shadow-lg shadow-purple-500/5"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
           >
-           
-            <span className="text-base font-medium text-purple-300">🚀 Powered by Solana & UPI</span>
-      
+            <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+            <span className="text-xs md:text-sm font-semibold bg-gradient-to-r from-purple-300 via-purple-200 to-green-300 bg-clip-text text-transparent">
+              Powered by Solana & UPI
+            </span>
           </motion.div>
     
 
           {/* Main Heading */}
           <motion.h1 
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-10 md:mb-16"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight w-full"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Buy <span className="gradient-text">Solana</span> with <span className="gradient-text">UPI</span>
-            <br className="hidden sm:block" />
-            Instantly, Securely, Reliably
+            <span className="block mb-1">Buy</span>
+            <span className="gradient-text block mb-1">Solana</span>
+            <span className="block">with <span className="gradient-text">UPI</span></span>
           </motion.h1>
 
           {/* Subheading */}
-          <motion.p 
-            className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed text-center mb-10 md:mb-16"
+          <motion.div 
+            className="space-y-3 w-full max-w-2xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <br />
-            Convert INR to SOL in minutes using any UPI app. Bank-grade security, transparent pricing, and privacy by default.
+            <p className="text-base md:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+              Convert <span className="text-white font-semibold">INR to SOL</span> in minutes.<br />
+              Bank-grade security. Transparent pricing.
+            </p>
             
-            
-            <span className="text-purple-300 text-base sm:text-lg md:text-xl mt-2 inline-block">No KYC required for small amounts.</span>
-            <br />
-          </motion.p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
+              <svg className="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-xs md:text-sm text-green-300 font-medium">
+                No KYC required for small amounts
+              </span>
+            </div>
+          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-10 pt-8 mt-2 md:mt-4 mb-16 md:mb-24 w-full relative z-10"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 w-full relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.98 }} className="relative overflow-hidden group rounded-3xl">
+            <motion.div 
+              whileHover={{ scale: 1.05, y: -2 }} 
+              whileTap={{ scale: 0.95 }}
+              className="relative group"
+            >
               <Link 
-                href="/app"
-                className="block w-full sm:w-auto px-12 py-5 md:px-16 md:py-7 bg-gradient-to-r from-[#14F195] to-[#9945FF] text-black font-bold rounded-3xl shadow-lg hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300 text-xl sm:text-2xl border-2 border-[#14F195]/40"
+                href="/demo/3d-button" 
+                className="relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 via-purple-500 to-green-500 text-white font-bold text-base rounded-xl overflow-hidden shadow-2xl shadow-purple-500/50 group-hover:shadow-purple-500/80 transition-all duration-500"
               >
-                <span className="relative z-10">Open App →</span>
+                {/* Animated gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-green-500 via-green-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                
+                {/* Glow pulse effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-green-500 rounded-xl opacity-30 group-hover:opacity-60 blur-lg transition-opacity duration-500 animate-pulse"></div>
+                
+                <span className="relative flex items-center gap-2 z-10">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Start Your First Trade
+                  <motion.svg 
+                    className="w-5 h-5"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </motion.svg>
+                </span>
               </Link>
-              <motion.div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#14F195]/20 to-[#9945FF]/20 rounded-3xl"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: '100%' }}
-                transition={{ duration: 0.5 }}
-              />
             </motion.div>
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.98 }} className="rounded-3xl">
-              <Link 
-                href="#features"
-                className="block w-full sm:w-auto px-12 py-5 md:px-16 md:py-7 bg-white/10 backdrop-blur-sm border-2 border-gray-700 text-white font-semibold rounded-3xl shadow-lg hover:bg-white/20 hover:border-purple-500 transition-all duration-300 text-xl sm:text-2xl"
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <a 
+                href="#how-it-works" 
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-white/5 backdrop-blur-sm border-2 border-white/20 text-white font-bold text-base rounded-lg hover:bg-white/10 hover:border-white/30 transition-all duration-300"
               >
-                Learn More
-              </Link>
+                <span>Learn More</span>
+                <motion.span
+                  className="text-sm"
+                  animate={{ y: [0, 3, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  ↓
+                </motion.span>
+              </a>
             </motion.div>
-            
-            
           </motion.div>
 
           {/* Stats */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-20 pt-24 md:pt-36 max-w-6xl mx-auto relative z-10"
-            initial={{ opacity: 0, y: 40 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-12 md:pt-16 w-full max-w-4xl mx-auto relative z-10"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
             {[
-              { value: '₹10L+', label: 'Daily Volume' },
-              { value: '5000+', label: 'Happy Users' },
-              { value: '<2min', label: 'Avg Transaction' }
+              { value: '₹10L+', label: 'Daily Volume', icon: '💰' },
+              { value: '5000+', label: 'Happy Users', icon: '🎉' },
+              { value: '<2min', label: 'Avg Transaction', icon: '⚡' }
             ].map((stat, index) => (
               <motion.div
                 key={index}
-                className="p-10 md:p-14 rounded-3xl bg-gradient-to-br from-purple-900/20 to-transparent border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-500 group cursor-pointer"
-                whileHover={{ y: -5, scale: 1.01 }}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.03 }}
+                className="group relative text-center p-5 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-white/20 hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
               >
-                <motion.div 
-                  className="text-5xl md:text-6xl font-bold gradient-text mb-6"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {stat.value}
-                </motion.div>
-                <div className="text-gray-400 text-xl md:text-2xl group-hover:text-gray-300 transition-colors">
-                  {stat.label}
+                {/* Glow Effect on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="text-2xl mb-2">{stat.icon}</div>
+                  <div className="text-2xl md:text-3xl font-black gradient-text mb-1">{stat.value}</div>
+                  <div className="text-xs md:text-sm text-gray-300 font-medium">{stat.label}</div>
                 </div>
               </motion.div>
             ))}
