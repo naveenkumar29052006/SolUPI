@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Twitter, Send, MessageCircle, Github } from 'lucide-react';
+import { Twitter, Send, MessageCircle, Github, Rocket, Heart } from 'lucide-react';
 
 export default function Footer() {
   const socialLinks = [
@@ -28,7 +28,8 @@ export default function Footer() {
           >
             <div className="text-2xl md:text-3xl font-black gradient-text mb-4">SolUPI</div>
             <p className="text-gray-300 mb-6 max-w-lg text-sm leading-relaxed font-light">
-              The <span className="text-white font-semibold">fastest</span> and most <span className="text-white font-semibold">secure</span> way to buy Solana using UPI in India. 🚀
+              The <span className="text-white font-semibold">fastest</span> and most <span className="text-white font-semibold">secure</span> way to buy Solana using UPI in India.
+              <Rocket className="inline w-4 h-4 ml-1 align-[-2px] text-white/70" aria-hidden />
             </p>
             <div className="flex space-x-2.5">
               {socialLinks.map((social, index) => {
@@ -122,13 +123,16 @@ export default function Footer() {
               © 2025 <span className="gradient-text font-bold">SolUPI</span>. All rights reserved.
             </p>
             <p className="text-gray-400 text-xs md:text-sm font-light flex items-center gap-2">
-              Made with <motion.span 
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-base"
+              Made with
+              <motion.span 
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity }}
+                className="inline-flex"
+                aria-hidden
               >
-                💜
-              </motion.span> for the <span className="gradient-text font-bold">Solana community</span>
+                <Heart className="w-4 h-4 text-purple-300" />
+              </motion.span>
+              for the <span className="gradient-text font-bold">Solana community</span>
             </p>
           </div>
         </motion.div>

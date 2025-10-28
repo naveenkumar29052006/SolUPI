@@ -2,12 +2,100 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { IndianRupee, Users, Zap } from 'lucide-react';
+import { useRef, useState } from 'react';
+
+// Premium stat card component with advanced animations
+function PremiumStatCard({ stat, index }) {
+  const cardRef = useRef(null);
+  const [coords, setCoords] = useState({ xPct: 50, yPct: 50 });
+
+  const handleMove = (e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xPct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const yPct = Math.max(0, Math.min(100, (y / rect.height) * 100));
+    setCoords({ xPct, yPct });
+  };
+
+  const glowStyle = {
+    background: `radial-gradient(400px circle at ${coords.xPct}% ${coords.yPct}%, rgba(255,255,255,0.1), transparent 50%)`
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      onMouseMove={handleMove}
+      className="group relative text-center p-6 rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl overflow-hidden cursor-pointer will-change-transform"
+      style={{ perspective: 1000 }}
+    >
+      {/* Animated gradient border */}
+      <div className="absolute inset-0 rounded-2xl p-[2px] bg-gradient-to-br from-white/20 via-purple-500/30 to-green-500/20 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-[2px] rounded-2xl bg-black/80 backdrop-blur-xl"></div>
+      </div>
+
+      {/* Ambient glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      {/* Cursor-follow spotlight */}
+      <div 
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={glowStyle}
+      />
+
+      {/* Sheen effect */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+        <div className="absolute -inset-1 translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000 ease-out" style={{
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)'
+        }} />
+      </div>
+
+      {/* Floating animation */}
+      <motion.div
+        className="relative z-10"
+        animate={{ y: [0, -4, 0] }}
+        transition={{
+          duration: 5 + index * 0.3,
+          repeat: Infinity,
+          repeatType: 'mirror',
+          ease: [0.4, 0.0, 0.6, 1]
+        }}
+      >
+        {/* Icon */}
+        <div className="flex items-center justify-center mb-3">
+          <stat.Icon className="w-6 h-6 text-white/90" strokeWidth={2} />
+        </div>
+
+        {/* Value with gradient */}
+        <motion.div 
+          className="text-3xl md:text-4xl font-black mb-1 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
+          whileHover={{ scale: 1.05 }}
+        >
+          {stat.value}
+        </motion.div>
+
+        {/* Label */}
+        <div className="text-xs md:text-sm text-gray-300 font-medium group-hover:text-white transition-colors duration-300">
+          {stat.label}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function HeroSection() {
   return (
-  <section id="home" className=" flex items-center justify-center overflow-hidden bg-black ">
+  <section id="home" className=" flex items-center justify-center overflow-hidden ">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black to-black pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-transparent pointer-events-none">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
       </div>
 
@@ -167,52 +255,22 @@ export default function HeroSection() {
 
           {/* Stats */}
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-12 md:pt-16 w-full max-w-4xl mx-auto relative z-10"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 md:pt-16 w-full max-w-4xl mx-auto relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             {[
-              { value: '₹10L+', label: 'Daily Volume', icon: '💰' },
-              { value: '5000+', label: 'Happy Users', icon: '🎉' },
-              { value: '<2min', label: 'Avg Transaction', icon: '⚡' }
+              { value: '₹10L+', label: 'Daily Volume', Icon: IndianRupee, gradient: 'from-purple-500 to-pink-500' },
+              { value: '5000+', label: 'Happy Users', Icon: Users, gradient: 'from-blue-500 to-cyan-500' },
+              { value: '<2min', label: 'Avg Transaction', Icon: Zap, gradient: 'from-green-500 to-emerald-500' }
             ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                whileHover={{ y: -5, scale: 1.03 }}
-                className="group relative text-center p-5 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-white/20 hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
-              >
-                {/* Glow Effect on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div className="relative z-10">
-                  <div className="text-2xl mb-2">{stat.icon}</div>
-                  <div className="text-2xl md:text-3xl font-black gradient-text mb-1">{stat.value}</div>
-                  <div className="text-xs md:text-sm text-gray-300 font-medium">{stat.label}</div>
-                </div>
-              </motion.div>
+              <PremiumStatCard key={index} stat={stat} index={index} />
             ))}
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        <div className="w-6 h-10 border-2 border-purple-500/50 rounded-full flex justify-center">
-          <motion.div
-            className="w-1.5 h-3 bg-purple-500 rounded-full mt-2"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </div>
-      </motion.div>
       <div className="h-32 md:h-48"></div>
     </section>
   );

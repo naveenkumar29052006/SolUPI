@@ -229,3 +229,23 @@ html {
 .animate-tunnel-zoom {
   animation: tunnel-zoom 3s linear infinite;
 }
+
+/* Feature card ring + scanline animations */
+@keyframes ring-dash {
+  to {
+    stroke-dashoffset: -300;
+  }
+}
+
+@keyframes scan-move {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(60%);
+  }
+}
+
+.feature-scan {
+  animation: scan-move 6s linear infinite;
+}
