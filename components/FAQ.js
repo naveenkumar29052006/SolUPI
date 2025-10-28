@@ -47,7 +47,9 @@ export default function FAQ() {
   };
 
   return (
-  <section id="faq" className="py-20 md:py-28 bg-black relative overflow-hidden">
+
+  <section id="faq" className="py-20 md:py-28 relative overflow-hidden">
+
       {/* Subtle background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-white/[0.02] pointer-events-none" />
       

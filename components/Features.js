@@ -1,7 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Zap, Lock, Globe, DollarSign, Smartphone, Shield } from 'lucide-react';
+
+import { Zap, Lock, Globe, DollarSign, Smartphone, Shield, Sparkles } from 'lucide-react';
+import React from 'react';
+
 
 export default function Features() {
   const features = [
@@ -65,8 +68,10 @@ export default function Features() {
     }
   };
 
+  
+
   return (
-  <section id="features" className="py-20 md:py-28 bg-black relative overflow-hidden">
+  <section id="features" className="py-20 md:py-28 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 via-transparent to-transparent pointer-events-none" />
       
@@ -85,7 +90,10 @@ export default function Features() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-semibold text-purple-300 uppercase tracking-wide">✨ Features</span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-300 uppercase tracking-wide">
+              <Sparkles className="w-3.5 h-3.5" aria-hidden />
+              Features
+            </span>
           </motion.div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
             Why Choose <span className="gradient-text">SolUPI</span>
@@ -106,33 +114,14 @@ export default function Features() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <motion.div
+              <InteractiveFeatureCard
                 key={index}
+                Icon={Icon}
+                title={feature.title}
+                description={feature.description}
+                color={feature.color}
                 variants={itemVariants}
-                className="group relative"
-                whileHover={{ y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-green-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative p-5 md:p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/20 group-hover:border-purple-500/50 transition-all duration-500 h-full flex flex-col overflow-hidden">
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-lg"></div>
-                  <div className="relative z-10">
-                    {/* Icon */}
-                    <div 
-                      className={`w-11 h-11 rounded-lg bg-gradient-to-br ${feature.color} p-2.5 mb-4 flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
-                    >
-                      <Icon className="w-full h-full text-white" strokeWidth={2.5} />
-                    </div>
-
-                    <h3 className="text-lg font-bold mb-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-green-300 transition-all duration-300">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed text-sm group-hover:text-gray-200 transition-colors duration-300">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+              />
             );
           })}
         </motion.div>
@@ -142,5 +131,100 @@ export default function Features() {
       </div>
       <div className="h-32 md:h-48"></div>
     </section>
+  );
+}
+
+// Futuristic premium card with 3D tilt, cursor glow, animated ring, and sheen
+function InteractiveFeatureCard({ Icon, title, description, color, variants }) {
+  const cardRef = React.useRef(null);
+  const [coords, setCoords] = React.useState({ xPct: 50, yPct: 50 });
+  const [tilt, setTilt] = React.useState({ rx: 0, ry: 0 });
+
+  const handleMove = (e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xPct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const yPct = Math.max(0, Math.min(100, (y / rect.height) * 100));
+    setCoords({ xPct, yPct });
+    // map to -1..1
+    const nx = x / rect.width - 0.5;
+    const ny = y / rect.height - 0.5;
+    // subtle tilt
+    setTilt({ ry: nx * 10, rx: -ny * 10 });
+  };
+  const handleLeave = () => {
+    setTilt({ rx: 0, ry: 0 });
+  };
+
+  const spotlightStyle = {
+    background: `radial-gradient(600px circle at ${coords.xPct}% ${coords.yPct}%, rgba(153, 69, 255, 0.15), rgba(20, 241, 149, 0.08) 40%, transparent 60%)`
+  };
+
+  return (
+    <motion.div
+      variants={variants}
+      className="group relative will-change-transform"
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{ perspective: 1000 }}
+    >
+      {/* Outer ambient glow (very subtle, premium) */}
+      <div className="absolute inset-0 rounded-3xl bg-white/[0.02] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+      {/* Cursor-tracking gradient spotlight - absolute background layer */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={spotlightStyle}
+      />
+
+      {/* Card */}
+      <motion.div
+        ref={cardRef}
+        className="relative p-5 md:p-6 rounded-3xl bg-white/[0.06] backdrop-blur-xl border border-white/10 hover:border-white/30 transition-all duration-500 h-full flex flex-col overflow-hidden"
+        style={{ transformStyle: 'preserve-3d', rotateX: tilt.rx, rotateY: tilt.ry }}
+      >
+
+        {/* Subtle scanlines for texture */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl opacity-0 group-hover:opacity-[0.15] transition-opacity duration-700"
+        >
+          <div
+            className="absolute -inset-1 feature-scan"
+            style={{
+              background: 'repeating-linear-gradient( -45deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 7px)'
+            }}
+          />
+        </div>
+
+        {/* Sheen sweep */}
+        <div className="pointer-events-none absolute inset-0 rounded-3xl overflow-hidden">
+          <div className="absolute -inset-1 translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000" style={{
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)'
+          }} />
+        </div>
+
+        <div className="relative z-10" style={{ transform: 'translateZ(30px)' }}>
+          {/* Icon with soft halo */}
+          <div className="relative mb-4">
+            <div className="absolute inset-0 blur-xl rounded-xl bg-white/5" />
+            <div className={`relative w-11 h-11 rounded-xl bg-gradient-to-br ${color} p-2.5 flex items-center justify-center shadow-lg`}>
+              <Icon className="w-full h-full text-white" strokeWidth={2.5} />
+            </div>
+          </div>
+
+          <h3 className="text-lg font-semibold mb-2 text-white tracking-tight">
+            {title}
+          </h3>
+          <p className="text-gray-300/90 leading-relaxed text-sm">
+            {description}
+          </p>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
