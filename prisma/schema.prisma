@@ -28,6 +28,8 @@ model Order {
     walletAddr  String
     status      String      @default("PENDING")
     utrNumber   String?     @db.VarChar(50)
+    txSignature String?  
+    recipientTokenAccount String?    //user's usdc address  
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
     completedAt DateTime?
