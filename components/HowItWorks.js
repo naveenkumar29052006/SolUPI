@@ -1,10 +1,16 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
 import { Wallet, QrCode, CreditCard, Rocket } from 'lucide-react';
 import Link from 'next/link';
 
 export default function HowItWorks() {
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start center', 'end start'] });
+  const progressRaw = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const progress = useSpring(progressRaw, { stiffness: 140, damping: 24, mass: 0.4 });
+  const progressScale = useMotionTemplate`${progress}`;
   const steps = [
     {
       number: '01',
@@ -37,7 +43,7 @@ export default function HowItWorks() {
   ];
 
   return (
-  <section id="how-it-works" className="py-32 md:py-40 bg-gradient-to-b from-black via-purple-900/10 to-black relative overflow-hidden">
+  <section ref={sectionRef} id="how-it-works" className="py-32 md:py-40 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -81,7 +87,10 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-semibold text-green-300 uppercase tracking-wide">🚀 How It Works</span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-300 uppercase tracking-wide">
+              <Rocket className="w-3.5 h-3.5" aria-hidden />
+              How It Works
+            </span>
           </motion.div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
             <span className="gradient-text">4 Simple Steps</span><br />
@@ -97,60 +106,7 @@ export default function HowItWorks() {
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
-              <motion.div
-                key={index}
-                className="relative group"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                whileHover={{ y: -10, scale: 1.02 }}
-              >
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div className="relative z-10 text-center p-5 md:p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-white/20 group-hover:border-purple-500/50 transition-all duration-500 h-full">
-                  {/* Big Number Badge */}
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-green-500 flex items-center justify-center shadow-xl shadow-purple-500/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                      <span className="text-lg font-black text-white">{step.number}</span>
-                    </div>
-                  </div>
-
-                  {/* Icon */}
-                  <div className="mt-4 mb-4">
-                    <div className={`mx-auto w-14 h-14 rounded-lg bg-gradient-to-br ${step.color} p-3 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}>
-                      <Icon className="w-full h-full text-white" strokeWidth={2.5} />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-lg font-black mb-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-green-300 transition-all duration-300">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
-                    {step.description}
-                  </p>
-                </div>
-
-                {/* Connecting Arrow (hidden on last item) */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:flex absolute top-1/2 -right-5 transform translate-x-1/2 -translate-y-1/2 z-20 items-center">
-                    <motion.div
-                      className="flex items-center"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: index * 0.15 + 0.3 }}
-                    >
-                      <div className="w-10 h-0.5 bg-gradient-to-r from-purple-500 to-green-500"></div>
-                      <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </motion.div>
-                  </div>
-                )}
-              </motion.div>
+              <InteractiveStepCard key={index} index={index} step={step} Icon={Icon} />
             );
           })}
         </div>
@@ -228,5 +184,89 @@ export default function HowItWorks() {
       </div>
       <div className="h-32 md:h-48"></div>
     </section>
+  );
+}
+
+// Premium interactive step card: tilt, cursor glow, sheen, animated icon
+function InteractiveStepCard({ step, Icon, index }) {
+  const cardRef = useRef(null);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+  const [coords, setCoords] = useState({ xPct: 50, yPct: 50 });
+
+  const handleMove = (e) => {
+    const el = cardRef.current; if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+    const xPct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const yPct = Math.max(0, Math.min(100, (y / rect.height) * 100));
+    setCoords({ xPct, yPct });
+    const nx = x / rect.width - 0.5; const ny = y / rect.height - 0.5;
+    setTilt({ ry: nx * 10, rx: -ny * 10 });
+  };
+  const handleLeave = () => setTilt({ rx: 0, ry: 0 });
+
+  const glowStyle = {
+    background: `radial-gradient(500px circle at ${coords.xPct}% ${coords.yPct}%, rgba(255,255,255,0.10), transparent 40%)`
+  };
+
+  return (
+    <motion.div
+      className="relative group z-30"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.12 }}
+      whileHover={{ y: -8 }}
+    >
+      {/* Ambient hover glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMove}
+        onMouseLeave={handleLeave}
+        className="relative z-10 p-6 md:p-7 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/15 hover:border-white/25 transition-all duration-500 h-full min-h-[276px] overflow-hidden flex flex-col items-center pt-10"
+        style={{ transformStyle: 'preserve-3d', rotateX: tilt.rx, rotateY: tilt.ry }}
+      >
+        {/* Cursor-follow glow */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={glowStyle} />
+
+        {/* Sheen */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+          <div className="absolute -inset-1 translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-1000" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)' }} />
+        </div>
+
+        {/* Number badge removed per request */}
+
+        {/* Icon */}
+        <motion.div className="mt-2 mb-4 z-10" whileHover={{ rotate: [0, -6, 6, 0] }} transition={{ duration: 0.9 }}>
+          <div className={`mx-auto w-14 h-14 rounded-xl bg-gradient-to-br ${step.color} p-3 flex items-center justify-center shadow-lg`}>
+            <Icon className="w-full h-full text-white" strokeWidth={2.5} />
+          </div>
+        </motion.div>
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col items-center text-center w-full">
+          <h3 className="text-lg font-black mb-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-green-300 transition-all duration-300">
+            {step.title}
+          </h3>
+          <p className="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-300 min-h-[72px]">
+            {step.description}
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Connector for large screens */}
+      {index < 3 && (
+        <div className="hidden lg:flex absolute top-1/2 -right-5 translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none items-center">
+          <motion.div className="flex items-center" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: index * 0.15 + 0.2 }}>
+            <div className="w-10 h-0.5 bg-gradient-to-r from-purple-500 to-green-500 drop-shadow-[0_0_6px_rgba(99,102,241,0.6)]"></div>
+            <svg className="w-6 h-6 text-green-400 drop-shadow-[0_0_6px_rgba(74,222,128,0.6)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </motion.div>
+        </div>
+      )}
+    </motion.div>
   );
 }
