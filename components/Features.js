@@ -1,8 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
+
 import { Zap, Lock, Globe, DollarSign, Smartphone, Shield, Sparkles } from 'lucide-react';
 import React from 'react';
+
 
 export default function Features() {
   const features = [
