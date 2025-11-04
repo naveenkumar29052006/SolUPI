@@ -157,7 +157,7 @@ export default function FAQ() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <p className="text-gray-400 mb-5 text-base md:text-lg">
-            Still have questions? <span className="text-white font-semibold">We're here to help</span>
+            Still have questions? <span className="text-white font-semibold">We&apos;re here to help</span>
           </p>
           <motion.button 
             whileHover={{ scale: 1.02, y: -2 }}

@@ -137,7 +137,7 @@ export default function WelcomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.6 }}
           >
-            Your account has been successfully verified and you're now part of the SolUPI community.
+            Your account has been successfully verified and you&apos;re now part of the SolUPI community.
           </motion.p>
 
           {/* Under construction section */}
@@ -154,7 +154,7 @@ export default function WelcomePage() {
             </div>
             
             <p className="text-gray-300 text-lg mb-6">
-              We're building something amazing for you! Our trading platform is under active development.
+              We&apos;re building something amazing for you! Our trading platform is under active development.
             </p>
 
             <div className="grid md:grid-cols-3 gap-4 text-sm">
@@ -216,7 +216,7 @@ export default function WelcomePage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 2, duration: 0.6 }}
           >
-            We'll notify you as soon as trading goes live! 🚀
+            We&apos;ll notify you as soon as trading goes live! 🚀
           </motion.p>
         </motion.div>
       </div>
