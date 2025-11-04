@@ -56,8 +56,7 @@ export default function Comparison() {
               >
                 <div className="px-4 py-3 text-gray-300">{r.feature}</div>
                 <div className="px-4 py-3 font-semibold text-white">
-                  <span className="inline-flex items-center gap-2 px-2 py-1 rounded-md bg-green-500/10 border border-green-500/20 transition-transform group-hover:scale-[1.01]">
-                    <span className="w-2 h-2 rounded-full bg-green-400" />
+                  <span className="inline-flex items-center gap-2 px-2 py-1 transition-transform group-hover:scale-[1.01]">
                     {r.solupi}
                   </span>
                 </div>

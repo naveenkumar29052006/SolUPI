@@ -10,13 +10,16 @@ datasource db {
 
 model User{
     id          String   @id @default(uuid())
-    email       String?   @unique
-    privyId     String?   @unique
+    name        String?
+    email       String   @unique
+    password    String
     walletAddr  String?
+    isVerified  Boolean  @default(false)
+    otp         String?  // Store current OTP
+    otpExpiry   DateTime? // OTP expiration time
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     orders      Order[]
-
 }
 
 
@@ -29,7 +32,7 @@ model Order {
     status      String      @default("PENDING")
     utrNumber   String?     @db.VarChar(50)
     txSignature String?  
-    recipientTokenAccount String?    //user's usdc address  
+    recipientTokenAccount String?    
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
     completedAt DateTime?

@@ -1,0 +1,229 @@
+'use client';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { X, Mail, CheckCircle } from 'lucide-react';
+import LoginForm from './LoginForm';
+import SignupForm from './SignupForm';
+
+export default function AuthCard({ onClose }) {
+  const [activeTab, setActiveTab] = useState('login');
+  const [currentStep, setCurrentStep] = useState('auth'); // 'auth', 'otp-verification', 'success'
+  const [otpData, setOtpData] = useState(null); // { email, isSignup }
+  const [otp, setOtp] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const router = useRouter();
+
+  const handleClose = () => {
+    router.push('/');
+  };
+
+  const handleAuthSuccess = (data) => {
+    if (data.requiresVerification) {
+      setOtpData({ 
+        email: data.email, 
+        isSignup: activeTab === 'signup',
+        user: data.user 
+      });
+      setCurrentStep('otp-verification');
+      setMessage(data.message);
+    } else if (data.isLoggedIn) {
+      setMessage(data.message);
+      setCurrentStep('success');
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
+    }
+  };
+
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      const endpoint = otpData.isSignup ? '/api/auth/verify-signup-otp' : '/api/auth/verify-login-otp';
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: otpData.email, 
+          otp: otp.replace(/\s/g, '') 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMessage(data.message);
+        setCurrentStep('success');
+        setTimeout(() => {
+          window.location.reload(); // Refresh to update auth state
+        }, 2000);
+      } else {
+        setMessage(data.error);
+      }
+    } catch (error) {
+      setMessage('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatOtp = (value) => {
+    const cleaned = value.replace(/\D/g, '');
+    const formatted = cleaned.replace(/(\d{3})(\d{0,3})/, '$1 $2').trim();
+    return formatted;
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={handleClose}
+      >
+        <motion.div
+          className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Animated gradient background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div
+              className="absolute -inset-[100%] opacity-20"
+              animate={{
+                background: [
+                  'radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.3) 0%, transparent 50%)',
+                  'radial-gradient(circle at 80% 50%, rgba(20, 241, 149, 0.3) 0%, transparent 50%)',
+                  'radial-gradient(circle at 50% 80%, rgba(147, 51, 234, 0.3) 0%, transparent 50%)',
+                  'radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.3) 0%, transparent 50%)',
+                ],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+          </div>
+
+          {/* Close button */}
+          <motion.button
+            onClick={handleClose}
+            className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-gray-400 transition-all duration-200 hover:bg-white/20 hover:text-white"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <X className="h-4 w-4" />
+          </motion.button>
+
+          {/* Header */}
+          <div className="relative z-10 px-6 pt-8 pb-6 text-center">
+            <motion.div
+              className="mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <h1 className="text-2xl font-black gradient-text mb-2">
+                Welcome to SolUPI
+              </h1>
+              <p className="text-sm text-gray-400">
+                {activeTab === 'login' 
+                  ? 'Sign in to your account to continue trading'
+                  : 'Create your account to start trading SOL'
+                }
+              </p>
+            </motion.div>
+
+            {/* Tab switcher */}
+            <div className="relative mx-auto w-fit">
+              <div className="flex rounded-lg bg-white/5 p-1">
+                <motion.button
+                  className={`relative px-6 py-2 text-sm font-semibold transition-colors duration-200 ${
+                    activeTab === 'login' ? 'text-white' : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                  onClick={() => setActiveTab('login')}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Login
+                  {activeTab === 'login' && (
+                    <motion.div
+                      className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-500/30 to-green-500/30 backdrop-blur-sm"
+                      layoutId="activeTab"
+                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </motion.button>
+                <motion.button
+                  className={`relative px-6 py-2 text-sm font-semibold transition-colors duration-200 ${
+                    activeTab === 'signup' ? 'text-white' : 'text-gray-400 hover:text-gray-300'
+                  }`}
+                  onClick={() => setActiveTab('signup')}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Sign Up
+                  {activeTab === 'signup' && (
+                    <motion.div
+                      className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-500/30 to-green-500/30 backdrop-blur-sm"
+                      layoutId="activeTab"
+                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </motion.button>
+              </div>
+            </div>
+          </div>
+
+          {/* Form content */}
+          <div className="relative z-10 px-6 pb-8">
+            <AnimatePresence mode="wait">
+              {activeTab === 'login' ? (
+                <motion.div
+                  key="login"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <LoginForm onSuccess={onClose} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="signup"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <SignupForm onSuccess={onClose} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Footer */}
+          <div className="relative z-10 border-t border-white/10 px-6 py-4 text-center">
+            <p className="text-xs text-gray-400">
+              By continuing, you agree to our{' '}
+              <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors">
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors">
+                Privacy Policy
+              </a>
+            </p>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
