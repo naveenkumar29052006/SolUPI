@@ -132,12 +132,12 @@ export default function WelcomePage() {
           </motion.p>
 
           <motion.p
-            className="text-lg text-gray-300 mb-8 leading-relaxed"
+            className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.6 }}
           >
-            Your account has been successfully verified and you&apos;re now part of the SolUPI community.
+            You&apos;ve successfully joined SolUPI! We&apos;re working hard to bring you the fastest and most secure way to buy Solana with UPI. Our platform is currently under development, and we&apos;ll notify you as soon as it&apos;s ready.
           </motion.p>
 
           {/* Under construction section */}
